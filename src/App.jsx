@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import { useState } from "react";
-import HomePage from "./components/HomePage";
-import RecommendationsPage from "./components/RecommendationsPage";
-import ActivityList from "./components/ActivityList";
-import Tracker from "./components/Tracker";
+import HomePage from "./pages/HomePage";
+import RecommendationsPage from "./pages/RecommendationsPage";
+import ActivityList from "./pages/ActivityList";
+import Tracker from "./pages/Tracker";
 
 function MainFlow() {
   const [currentPage, setCurrentPage] = useState("home");
