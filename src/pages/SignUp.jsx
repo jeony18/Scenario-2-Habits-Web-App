@@ -18,21 +18,48 @@ function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
+  const [errorMsg, setErrorMsg] = useState('')
+
   const emailValid = isValidEmail(email)
   const passwordValid = PASSWORD_RULES.every((rule) => rule.test(password))
   const passwordsMatch = password === confirmPassword
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault()
     setSubmitted(true)
+    setErrorMsg('')
     if (!emailValid || !passwordValid || !passwordsMatch) return
-    // TODO: connect to Flask backend
+
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Successfully registered, navigate to login
+        navigate('/signin')
+      } else {
+        setErrorMsg(data.error || 'Registration failed')
+      }
+    } catch (err) {
+      setErrorMsg('Failed to connect to the server')
+    }
   }
 
   return (
     <div className="min-h-screen bg-brand-bg flex items-center justify-center px-4">
       <div className="w-full max-w-md border border-brand-border rounded-2xl p-8">
         <h1 className="text-2xl font-bold text-brand-text mb-8">Sign Up</h1>
+
+        {errorMsg && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {errorMsg}
+          </div>
+        )}
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
