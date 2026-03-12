@@ -17,7 +17,7 @@ export default function HomePage({ onGetActivities }) {
     <div className="min-h-screen bg-gray-400 text-white">
       {/* Header Navigation */}
       <nav className="bg-gray-600 p-4 flex justify-between items-center">
-        <div className="w-20 h-8 bg-gray-300 rounded"></div>
+        <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
           <button className="hover:text-gray-200" onClick={() => window.location.href = '/home'}>Home</button>
           <button className="hover:text-gray-200" onClick={() => window.location.href = '/tracker'}>Tracker</button>
