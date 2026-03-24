@@ -1,0 +1,149 @@
+ENGF00 34 Scenario 2 
+ 
+Introduction  
+Computers have the potential to improve people’s lives, whether through automation, complicated 
+calculation, or  interaction and  entertainment. Your task for this scenario is to implement a computer 
+system or tool that makes use of the skills, knowledge, or concepts you have learned in your first year 
+and wh ich relates to the theme chosen this year . In groups of 4, you will  create  and demo  a lightweight 
+prototype of the system  you proposed in Scenario 1* , as well as submit an individual reflection  on the 
+project and how it went.  
+* You are not required to use the proposal you gave in Scenario 1. If you would like to make changes or 
+go with a different idea, that is fine.  Your idea must still obey the requirements of Scenario 1, though 
+(related to the chose n theme, and no large AI models).  
+Scenario deliverables  
+There will be three  deliverable s in this scenario: (1) a  URL to a  5-10 minute  video demo  of your system  
+(group submission ), (2) a zip of your code/design files (group submission), and (3) a 2-4 page reflection 
+on the process of designing and implementing  your project and what you contributed to it (individual 
+submission) . You will receive  a group mark for the presentation and an individual mark for your 
+reflection.  These will be average d together to get your overall Scenario 2 mark.  
+Project  and codebase  
+The duration of the project is short, so some projects may simply be a prototype or mockup of the 
+proposed system with some functionality  limited or working only on hardcoded  data.  It is recommended 
+that you start out with some kind of prototype and then fill out functionality  as you have the time for it . 
+Functionality should be prioritized so that the idea of your project can be conveyed even if the 
+implementation is not finished.  
+We will inspect your code but not run it. Therefore, please focus on submitting files that you created for 
+this project rather than dependencies and libraries/components that others wrote.  
+Demo  video  
+In your demo, you should briefly describe the project your group decided to implement , demonstrate 
+your system working , and briefly summarize how it was implemented . Part of the marking criteria for 
+this coursework is creativity, so it is recommended that your video demonstrates creativity, either in 
+terms of the idea behind the project and its features or in terms of problem -solving . Ideally, all members 
+of your group should have the chance to speak.  Videos  can be uploaded to UCL Mediacentral or to 
+Youtube . The URL is then submitted  on Moodle.  
+One option for recording video is to have a group Teams or Zoom call attended by all members which is 
+then recorded.  Screensharing can be used as needed  to demonstrate your project.  Another option is to 
+record individually and use video editing to combine clips as needed.  
+Reflection contents  
+In your reflection, you should describe the approach that you/your group had in terms of brainstorming, 
+prototyping, and implementing your project.  It should also go into detail on some part of the project 
+that you worked on.  If there were shortcomings , planned functionality that wasn’t completed by the 
+end, unexpected difficulties, etc. explain those and describe what further work you intended/is needed 
+to complete the project . Please also reflect on your contributions to the project , and what you 
+personal ly learned from the project.  
+This reflection will be used to evaluate your individual contribution and knowledge of the project.  Please 
+include your group number  and name  in the filename of your submission, as this helps me when 
+downloading submissions.  
+Generative AI policy  
+Gen AI tools can be used to assist your coding/implementation and to check your writing. However, the 
+writing of your individual reflection must be your own work. In addition, if you use generative AI to 
+assist with your implementation , please make a brief note , either as a comment in your code files, in 
+your presentation, in your individual reflection, etc.  summarizing where and how it was used.  
+Marking  
+The mark for the second scenario is worth 20% of the ENGF0 034 mark, or half of the 40% allocated to 
+the Scenarios.  You will receive a group mark for the presentation/code and an individual mark for your 
+reflection, which will be averaged together with equal (50/50) weight to get a final mark.  
+Marking criteria for group submission:  
+The main criteria for marking  the group submission  are: 
+1. Achievement : The tool is usable and useful to users. Project is ambitious with h igh level of 
+achievement.  
+2. Creativity : Tool is creative and interesting. Problems and time constraints creatively worked 
+around.  
+3. Speaking / oral presentation skills : Demo of project is clear and well -explained. Presentation is 
+concise and makes good use of time.  Presentation is organized and has clear structure.  
+1st 
+Distinction  
+Exceptional / 
+Outstanding  
+80-100%  • Exceptional level of accomplishment, going over and beyond to deliver a 
+high -quality experience to users.  
+• Tool is highly unique with creative features implemented.  
+• Flawless and polished presentation, exceptional quality of demonstration.  
+1st 
+Distinction  
+Excellent  
+70-79%  • A high -quality tool that makes ambitious goals and meets them.  
+• Creativity clearly demonstrated in design of tool and techniques used to 
+accomplish the work.  
+• Very high quality of delivery. Use of presentation medium with 
+professional style.  
+2:1 
+Merit  
+Good  
+60-69%  • A good solution to the task set that makes significant accomplishments.  
+• Response to the task set demonstrates some thoughtfulness and 
+ingenuity or attempt at creativity.  
+• Overall good presentation  or demo , persuasive and compelling.  
+2:2 
+Pass  
+Satisfactory  
+50-59%  • Reasonable solution, with s everal shortcomings in execution.  
+• No attempt at creativity but standard programming techniques were 
+applied to a tool that (partially or wholly) fulfills the task set.  
+• Able to communicate, present and/or demonstrate solution and 
+summarise work in appropriate format.  
+3rd 
+Weak  
+40-49%  • Rudimentary response to the task set, significantly incomplete.  
+• No originality in approach, and difficulty executing standard 
+techniques/solutions.  
+• Ineffective oral presentation or demo of the solution.  
+Fail 
+< 40%  • No solution to the given problem, completely incorrect code for the given 
+task.  
+• Poorly done presentation or demonstration, very low quality.  
+ 
+Marking criteria for individual reflection:  
+The main criteria for marking individual reflections are : 
+1. Demonstrating thought about the project and the development process . 
+2. Demonstrating familiarity with the project and contribution to it.  
+1st 
+Distinction  
+Exceptional / 
+Outstanding  
+80-100%  • Exceptional response demonstrating thought and nuance about the 
+project  and various considerations related to design/implementation . 
+• Demonstration of deep familiarity with and high -quality contributions to 
+the project. Demonstration of exceptional support of and cooperation 
+with team members.  
+1st 
+Distinction  
+Excellent  
+70-79%  • A distinctive response that develops a clear a ccount of the project and 
+design/implementation decisions , with evidence of nuance.  
+• Demonstration of deep familiarity with the parts of the project that were 
+personally worked on. Demonstration of high -quality contributions to the 
+project.  
+2:1 
+Merit  
+Good  
+60-69%  • A sound response with a reasonable account of the project and 
+design/implementation decisions . 
+• Demonstration of familiarity with some part of the project and 
+demonstration of significant contribution s to the project.  
+2:2 
+Pass  
+Satisfactory  
+50-59%  • A basic account of the project with some understanding/explanation of 
+design/implementation decisions.  
+• Basic familiarity of the project with some evidence of contribution . 
+3rd 
+Weak  
+40-49%  • Basic understanding of the project with  minimal  
+understanding/explanation of design/implementation decisions . 
+• Basic familiarity of the project with weak evidence of contribution . 
+Fail 
+< 40%  • No understanding of project or involvement with decisions 
+demonstrated . 
+• No evidence of contribution . 
+ 

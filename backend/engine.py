@@ -5,6 +5,47 @@ W_B = 0.5   # sociability match weight
 W_I = 0.15  # importance weight
 TOP_K = 2
 
+OUTDOOR_KEYWORDS = {
+    "jog", "run", "cycling", "bike", "hike", "walk", "climbing", "snorkel", "park", "court", "outdoor"
+}
+
+BAD_WEATHER = {"rain", "snow", "storm"}
+
+
+def is_outdoor_activity(activity):
+    text = f"{activity.get('name', '')} {activity.get('description', '')}".lower()
+    return any(keyword in text for keyword in OUTDOOR_KEYWORDS)
+
+
+def context_adjustment(activity, context=None):
+    """Context-aware bonus/penalty based on weather and time of day."""
+    if not context:
+        return 0
+
+    adjustment = 0
+    weather = str(context.get("weather", "unknown")).lower()
+    hour = context.get("hour")
+    is_weekend = bool(context.get("isWeekend", False))
+
+    if weather in BAD_WEATHER and is_outdoor_activity(activity):
+        adjustment -= 6
+    elif weather == "clear" and is_outdoor_activity(activity):
+        adjustment += 1
+
+    if isinstance(hour, int):
+        if hour >= 21 or hour < 6:
+            if activity["physicality"] >= 4:
+                adjustment -= 4
+            if activity["sociability"] >= 4:
+                adjustment -= 2
+        elif 6 <= hour <= 9 and activity["duration"] <= 2:
+            adjustment += 1
+
+    if is_weekend and activity["sociability"] >= 4:
+        adjustment += 1.5
+
+    return adjustment
+
 def match(a, b):
     """
     Returns a score indicating how well a requirement matches the user's current energy.
@@ -26,7 +67,7 @@ def match(a, b):
     return 16 - (diff ** 2)
 
 
-def score_activity(activity, physical_energy, social_battery, recent_logs=None):
+def score_activity(activity, physical_energy, social_battery, recent_logs=None, context=None):
     """
     Calculates the final suitability score for an activity.
     
@@ -42,6 +83,8 @@ def score_activity(activity, physical_energy, social_battery, recent_logs=None):
         + W_B * match(activity["sociability"], social_battery)
         + W_I * activity["importance"]
     )
+
+    base_score += context_adjustment(activity, context)
     
     # Apply a heavy recency penalty if the user already just did this!
     if activity["id"] in recent_logs:
@@ -64,16 +107,16 @@ def hard_filter(activities, available_time):
     return [a for a in activities if a["duration"] <= buffer_tolerance]
 
 
-def top_k(activities, physical_energy, social_battery, recent_logs, k=TOP_K):
+def top_k(activities, physical_energy, social_battery, recent_logs, context=None, k=TOP_K):
     scored = sorted(
         activities,
-        key=lambda a: score_activity(a, physical_energy, social_battery, recent_logs),
+        key=lambda a: score_activity(a, physical_energy, social_battery, recent_logs, context),
         reverse=True,
     )
     return scored[:k]
 
 
-def take_the_leap(activities, physical_energy, social_battery, excluded_ids, recent_logs):
+def take_the_leap(activities, physical_energy, social_battery, excluded_ids, recent_logs, context=None):
     """
     Recommends a "wildcard" activity slightly outside the user's comfort zone.
     
@@ -100,11 +143,11 @@ def take_the_leap(activities, physical_energy, social_battery, excluded_ids, rec
 
     return max(
         candidates,
-        key=lambda a: score_activity(a, boosted_energy, boosted_battery, recent_logs),
+        key=lambda a: score_activity(a, boosted_energy, boosted_battery, recent_logs, context),
     )
 
 
-def recommend(activities, available_time, physical_energy, social_battery, recent_logs=None):
+def recommend(activities, available_time, physical_energy, social_battery, recent_logs=None, context=None):
     """
     Main recommendation engine hook.
     """
@@ -114,12 +157,12 @@ def recommend(activities, available_time, physical_energy, social_battery, recen
     filtered = hard_filter(activities, available_time)
     
     # We pass the recent logs into top_k to enforce recency bias
-    deterministic = top_k(filtered, physical_energy, social_battery, recent_logs)
+    deterministic = top_k(filtered, physical_energy, social_battery, recent_logs, context)
     
     excluded_ids = {a["id"] for a in deterministic}
     
     # We also pass recent logs into leap so our wildcard isn't something we just did either
-    leap = take_the_leap(filtered, physical_energy, social_battery, excluded_ids, recent_logs)
+    leap = take_the_leap(filtered, physical_energy, social_battery, excluded_ids, recent_logs, context)
     
     return {
         "deterministic": deterministic,

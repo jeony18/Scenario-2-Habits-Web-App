@@ -1,0 +1,95 @@
+Introduction
+Decision fatigue is a silent problem that has proliferated ever since humans have been able to combine work, recreation, and rest into a tiny device the size of their palms. The endless information and multitude of choices we face every day makes us more resourceful but can mentally drain us and overload our cognition. Furthermore, we humans spend vast amounts of our precious free time on social media under the pretence of “rest” or having nothing to do, killing our productivity while leaving ourselves further depleted and unfulfilled. Technology gives us the ability to be theoretically productive, yet ironically it is often the core of unproductivity.
+
+The effect of an exhausted mind often leads to a vicious cycle of procrastination, doom scrolling, and impulsivity. Our solution strives to tackle decision fatigue through simplifying the process of choosing a productive activity in the user’s free time, preventing them from falling into the vicious cycle. We leverage the FOGG behaviour model which states Behaviour = Motivation (hobbies) x Ability (user circumstances) x Prompt (recommendation). Often, people have the motivation and ability but do not do so as they are distracted by technology. Our website prompts activities that align with users’ hobbies and abilities to encourage productive habits.
+
+We employ a solution that leverages choice architecture to minimize cognitive stress on users. Users pick from a list of  potential activities that fit their current circumstances. Our solution accounts for factors such as energy and time and picks activities the user enjoys. Using these, the website will suggest three activities the user can do. While two of the recommendations are deterministic to ensure consistency with user goals, one of the activities the algorithm suggests is given a degree of randomness to encourage users to exit their comfort zones.
+
+Our target audience focuses on people who want to simplify their decision making by having our website “think” for them. This would include users who are striving to be more productive, users who constantly experience a high cognitive load and want to prevent burnouts, as well as users who are trying to have more fulfilling habits and timetables. 
+Core features/Functionality
+Home Page
+The home page takes user inputs regarding the user’s current circumstances. This includes the available time the user has, the physical energy, and the social battery of the user. Based on Fogg’s behaviour model these factors influence a user’s ability the greatest. The inputs here will be given to the algorithm to determine what activities the user can do in the current situation. The inputs are presented in an intuitive and simple manner ensuring low cognitive load for the users. This is done using close-ended queries that give a good gauge of the user’s responses.
+
+The page scrolls down to the recommended activities determined using the user inputs through a heuristic recommendation engine. It displays three recommended activities and users choose an activity by clicking the “Start Activity” button. The rationale is to prevent “forcing” the user to do an activity by giving them choice through two other alternative activities. This is how choice architecture is implemented with the goal of protecting user morale.
+
+
+Figure 1a: Home Page Wireframe
+
+
+Figure 1b : Home Page Wireframe scrolled down
+Interests Page
+The interests page allows the user to search through a database of popular activities. Users can sift through the database for activities they enjoy and highlight multiple activities they are interested in. After which, they can select how important this interest is to their lives on a scale of 1 to 5. 
+
+Furthermore, users can add activities not listed in the database to their interest list. They will be required to provide the name, description (optional) duration, physicality and sociability of the activity, all on a scale of 1 to 5.
+
+This page identifies user hobbies so that the algorithm can suggest personalised activities. Without any selection of activities, the algorithm will select a random activity that fits into the user’s inputs. 
+
+
+Figure 2: Interests Page Wireframe
+Activity History Page
+This activity history page lists the activities the user has done across a week. Activities will be automatically added when a user clicks the “Start Activity” button in the recommendation page, otherwise, users also have the ability to manually add independently completed activities to this page. It serves as a tool for users to track how they have spent their free time across the whole week.
+
+
+Figure 3: Activity History Page Wireframe
+User Authentication Page
+To allow for personalised activities and activity tracking, users must log in or sign up using their email address and password. Users must use a secure password, ensuring it is at least 8 characters long with at least 1 upper case character, 1 lower case character, 1 number and 1 special character. Once users login, they are redirected to the home page and the ‘Log In’ button changes to a ‘Log Out’ button, which can be pressed to immediately log out. Verified users are identified to prevent having to repeatedly enter credentials (see section 4.4).
+
+Figure 4: User Authentication Page Wireframe
+Framework
+Frontend
+ReactJS will be the framework our frontend runs on. This framework is practical as it allows cross-platform compatibility of the application which would likely be an expected aspect of functionality. Additionally, ReactJS being an industry standard front end library makes it easy to purposefully extend functionality, as we can draw from its developed ecosystem of supplementary libraries to tailor to our needs.
+
+ReactJS is also appropriate specifically to the project because it centres around creating modular jsx components. We can use this to create html element formats to display habits with the relevant information to the varying contexts of the app. For example, the component for habits on the interests page would incorporate a description and an interactable rating element, and on the recommendation page you would instead display the attributes of the Fogg behaviour model taken into consideration.
+
+The Tailwind CSS framework is a utility-first CSS framework that will be used alongside ReactJS in order to streamline the HTML custom design process.
+Backend
+We have chosen the python Flask framework due to its lightweight design that allows for fast development, allowing the program to be engineered more intentionally. The project logic is relatively simple, comprising of an algorithm and manageable data, so it does not require the optimized algorithms of lower-level languages, nor the more heavy set handling speeds of alternative frameworks. 
+
+The key components of the app, user profiles and habits, also map naturally onto objects, so using python for the backend is an intuitive option.
+Database
+The system utilizes SQLite as the primary database engine. It stores the entire database as a single cross-platform file and manages structured metadata attributes such as required physical energy, activity duration, and social battery consumption. SQL Alchemy has been chosen as the framework to provide an interface that allows the SQL database to be accessed through Python objects.
+List of Components
+Database
+The database consists of three tables, the Users table, the Activities table and the ActivityLogs table. Records in the users table are added when a new account is created. It contains information about the user and each account will be given a unique user ID. The activities table stores all activity information for all users. Users can modify existing activity information or add new activities. The ActivityLogs table stores activity history for each user where each record corresponds to an activity the user has done. This will be used to display information on the activity history page.
+
+
+Figure 5: Entity Relationship Diagram (ERD) for the database
+Activities
+The activity records are stored in the Activities table in the database. Each activity record consists of:
+An INTEGER for an activity ID (primary key)
+An INTEGER for the user ID (foreign key)
+VARCHARs for the activity name and description
+INTEGERs for the duration, physicality, sociability and importance, in the range of 1 to 5
+
+Every time a new user is added, the activities database executes an INSERT statement to add a set of predefined default activities with importance values of 1 with their specific user ID. Users add new activities by submitting data for all the required attributes through the Interests page, which executes an INSERT statement to store the activity's attributes as a new record in the database table. When a user wants to modify an activity, the application interface submits the updated values and executes an UPDATE statement to modify the specific attributes within that activity’s record. When the program needs to access a user’s activities, it executes a conditional SELECT query to find activities that include the corresponding user ID.
+Activity History
+The activity history is implemented using an ActivityLogs table within the database, establishing a one-to-many relationship with the Activities table. Each time a user completes an activity, a new record is created containing an INTEGER for the unique log ID as the primary key, a TIMESTAMP marking the completion and a foreign key referencing the activity ID, allowing us to use JOIN statements to access the user ID and activity name while keeping the database in Third Normal Form. The program is designed to automatically generate these logs when an activity is completed through the interface, but it also allows users to manually log activities to ensure the history remains comprehensive. The program executes SQL queries with conditional WHERE clauses that filter timestamps against the current system time. The displayed table is then generated to include all and only the activities they have done over the past week.
+User Authentication
+Users access their personalized activities and tracking history by logging in with an email address and password. Passwords are checked to be secure (at least 8 characters long, 1 upper case character, 1 lower case character, 1 number, 1 special character) using regular expressions. All user-specific data is stored within the relational database, with each record containing an INTEGER for the user ID (primary key), VARCHARs for the email and password hash, and TIMESTAMPS for the date created and last login.
+
+To maintain security, passwords are never stored in plain text. Instead, the system uses a cryptographic hashing algorithm, Argon2id, to store a secure hash of the password. When a user attempts to log in, the provided password is hashed and compared against the stored value. Once authenticated, the application manages active sessions using the Flask-Login extension, which utilizes secure, HTTP Only session cookies to verify the user’s identity for every request without requiring them to re-enter their credentials repeatedly.
+
+Heuristic Recommendation Engine 
+The heuristic recommendation engine operates through a two-phase filtering and scoring process to isolate the most suitable activities for the user. In the first phase, a hard cutoff is applied directly at the data layer: the program executes a conditional SQL query to retrieve only those activities from the database that meet the user’s specified duration. This ensures that any activity exceeding the user's available time is never loaded into memory.
+
+In the second phase, the remaining activities are evaluated using a weighted scoring formula based on the other inputs: physicality, sociability, and importance. Each activity is assigned a score calculated as follows:
+ where E is physical energy, B is social battery, I is importance and ws are the respective weights.
+
+Once the score is calculated, the program executes a Top K Selection algorithm, where the scored activities are iterated through and, in this case, the 2 highest scoring activities are kept track of, and then are returned at the end. The program then repeats the second phase after giving a random boost in the user’s input sociability or physicality, this time only tracking the single highest scoring activity, for the “Take the Leap” activity (see figure 1b).
+
+The weights for sociability and physicality are linked, having a default value of 0.5 each and always summing to 1, while the weight for the importance is independent and in the range of 0 to 0.3. The weights are dynamically adjusted for each user based on their history. If a user neglects high-importance tasks, the importance weight increases to prioritise them in future recommendations. The physicality weight is calculated by looking at the recent activities completed and dividing the sum of the physicality ratings by the sum of the physicality and sociability ratings of these activities. The sociability score will just be 1 - physicality score. For example, if the user recently has jogged twice, with a physicality score of 4 and a sociability score of 2, and they went for a coffee once with a physicality score of 2 and a sociability score of 4, then the sum of their physicality scores will be 10 and the sum of their sociability scores will be 8. This means their physicality weight will be  and so their sociability weight will be . In this case, future recommendations will prioritise physicality more. The weights are given a cap: they can not be less than 0.25 or greater than 0.75 to prevent an attribute dominating the recommendation engine and ensuring a baseline level of variety.
+
+
+Figure 6: Flow chart logic from user input to recommended activities for the user
+Ethics Analysis
+Data Safety, Security and Sovereignty
+
+To protect user privacy and ensure data ownership, we collect the minimum amount of data possible. The inputs gathered are all core to the overall application functionality. To gain user trust, we will be transparent and provide explanations on why the user data is collected and how it will be managed. All stored data is pseudonymised, meaning personal identifiers are hidden and users can delete their accounts to remove all personal data from our servers.
+Choice Architecture
+The website’s purpose is to simplify decision making rather than make decisions for users. This distinction is shown in our UI and wording which makes clear that the user makes the final choice and is not compelled to do the suggested activity. This is demonstrated by giving the user three choices rather than one. Showing three activities prevents users from believing that there is only one “optimal” activity. We want to prevent the scenario where the user feels forced to perform an activity despite not wanting to do it, rather we aim to prompt users to do activities they otherwise might not do without an external push.
+Mitigating Algorithmic Reinforcement
+A risk of using a deterministic recommendation engine is that it recommends recurrent activities when given similar inputs. This can act as an echo chamber which reinforces certain user behaviours . For example, if a user consistently inputs low social battery, the recommendation engine will inadvertently suggest activities that require low social battery, which in extreme cases can enforce anti-social behaviour of the user. To reduce such possibilities, the recommendation engine will suggest a “Take the Leap” activity (see 4.5) that differs from user inputs. Furthermore, we will ensure our default activities are widely beneficial and safe for all users.
+Anti-captive Design
+Our website is designed to be a helpful tool that relieves mental stress. Hence there will be minimal streaks and notifications that demand user’s attention, we follow an ‘exit-first’ approach. This includes not having streaks which pressures users to maintain the streak, we ensure the app only serves to reduce stress and not add to it. Additionally, progress statistics like activity history are available but will be done passively and relies on user intent to be accessed.
+
+

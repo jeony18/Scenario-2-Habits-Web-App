@@ -52,6 +52,35 @@ class ActivityLog(db.Model):
 with app.app_context():
     db.create_all()
 
+
+def seed_missing_default_activities(user_id):
+    existing_activities = Activity.query.filter_by(UserID=user_id).all()
+    existing_names = {a.Name.strip().lower() for a in existing_activities}
+
+    added_count = 0
+    for act in default_activities:
+        name_key = act["name"].strip().lower()
+        if name_key in existing_names:
+            continue
+
+        new_act = Activity(
+            UserID=user_id,
+            Name=act["name"],
+            Description=act["description"],
+            Duration=act["duration"],
+            Physicality=act["physicality"],
+            Sociability=act["sociability"],
+            Importance=act["importance"],
+        )
+        db.session.add(new_act)
+        existing_names.add(name_key)
+        added_count += 1
+
+    if added_count > 0:
+        db.session.commit()
+
+    return added_count
+
 @app.route('/api/signup', methods=['POST'])
 def signup():
     data = request.json
@@ -67,20 +96,8 @@ def signup():
     new_user = User(Email=email, PasswordHash=generate_password_hash(password))
     db.session.add(new_user)
     db.session.commit()
-    
-    # Pre-populate with default activities
-    for act in default_activities:
-        new_act = Activity(
-            UserID=new_user.UserID,
-            Name=act['name'],
-            Description=act['description'],
-            Duration=act['duration'],
-            Physicality=act['physicality'],
-            Sociability=act['sociability'],
-            Importance=act['importance']
-        )
-        db.session.add(new_act)
-    db.session.commit()
+
+    seed_missing_default_activities(new_user.UserID)
 
     return jsonify({"message": "User created successfully"}), 201
 
@@ -93,6 +110,7 @@ def signin():
     user = User.query.filter_by(Email=email).first()
 
     if user and check_password_hash(user.PasswordHash, password):
+        seed_missing_default_activities(user.UserID)
         user.LastLogin = datetime.utcnow()
         db.session.commit()
         return jsonify({"message": "Login successful", "email": user.Email, "userId": user.UserID}), 200
@@ -204,6 +222,14 @@ def map_minutes_to_slots(minutes):
     else:
         return 5
 
+
+def normalize_weather(weather):
+    if not weather:
+        return "unknown"
+    value = str(weather).lower()
+    allowed = {"clear", "cloudy", "rain", "snow", "storm", "unknown"}
+    return value if value in allowed else "unknown"
+
 @app.route('/api/recommend', methods=['POST'])
 def get_recommendations():
     data = request.json
@@ -214,7 +240,7 @@ def get_recommendations():
     acts = Activity.query.filter_by(UserID=user_id).all() if user_id else []
     
     # Map them to the list logic expected by engine
-    user_activities = [{"id": a.ActivityID, "name": a.Name, "duration": a.Duration, 
+    user_activities = [{"id": a.ActivityID, "name": a.Name, "description": a.Description or "", "duration": a.Duration, 
                         "physicality": a.Physicality, "sociability": a.Sociability, 
                         "importance": a.Importance} for a in acts]
     
@@ -226,6 +252,18 @@ def get_recommendations():
     time_minutes = data.get('timeAvailable', 30)
     physical_energy = data.get('physicalEnergy', 3)
     social_battery = data.get('socialBattery', 3)
+    context_data = data.get('context', {})
+
+    try:
+        context_hour = int(context_data.get('hour'))
+    except (TypeError, ValueError):
+        context_hour = None
+
+    recommendation_context = {
+        "weather": normalize_weather(context_data.get('weather')),
+        "hour": context_hour,
+        "isWeekend": bool(context_data.get('isWeekend', False)),
+    }
     
     # 3. Map minutes to Python engine slots
     available_time_slots = map_minutes_to_slots(time_minutes)
@@ -241,7 +279,14 @@ def get_recommendations():
         recent_activity_ids = {log.ActivityID for log in recent_logs}
     
     # 5. Get recommendations using custom engine, passing in the recent activities to penalize
-    results = recommend(user_activities, available_time_slots, physical_energy, social_battery, recent_activity_ids)
+    results = recommend(
+        user_activities,
+        available_time_slots,
+        physical_energy,
+        social_battery,
+        recent_activity_ids,
+        recommendation_context,
+    )
     
     # 6. Format results safely for React (handle cases with None values)
     deterministic = results.get("deterministic", [])

@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+const DAY_ABBR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function Tracker() {
   const [logs, setLogs] = useState([]);
@@ -38,14 +54,60 @@ export default function Tracker() {
     return <div className="min-h-screen bg-gray-400 p-8 text-white">Loading tracker...</div>;
   }
 
-  // Pre-process Data: Create a matrix of Habit x Days
-  // rows = [{ activity: "Weight lifting", days: { 0: true, 2: false ... } }]
-  
-  // Actually, let's just make it dynamic.
-  // Each row is an activity. columns are Monday...Sunday (0..6)
-  
-  // Only display habits that have been logged OR just display all user's habits? 
-  // Let's display all user habits.
+  const now = new Date();
+  const oneWeekAgo = new Date(now);
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+  const weeklyLogs = logs.filter((log) => {
+    const timestamp = new Date(log.timestamp);
+    return !Number.isNaN(timestamp.getTime()) && timestamp >= oneWeekAgo;
+  });
+
+  const activityMap = activities.reduce((acc, act) => {
+    acc[act.id] = act;
+    return acc;
+  }, {});
+
+  const dayCounts = weeklyLogs.reduce((acc, log) => {
+    const day = log.dayOfWeek;
+    if (typeof day === "number" && day >= 0 && day <= 6) {
+      acc[day] += 1;
+    }
+    return acc;
+  }, [0, 0, 0, 0, 0, 0, 0]);
+
+  const weeklyBarData = DAY_ABBR.map((day, idx) => ({
+    day,
+    count: dayCounts[idx],
+  }));
+
+  const completedActivities = weeklyLogs
+    .map((log) => activityMap[log.activityId])
+    .filter(Boolean);
+
+  const safeAverage = (values) => {
+    if (!values.length) return 0;
+    return Number((values.reduce((sum, n) => sum + n, 0) / values.length).toFixed(2));
+  };
+
+  const radarData = [
+    { metric: "Physical", value: safeAverage(completedActivities.map((a) => a.physicality)) },
+    { metric: "Social", value: safeAverage(completedActivities.map((a) => a.sociability)) },
+    { metric: "Duration", value: safeAverage(completedActivities.map((a) => a.duration)) },
+    { metric: "Importance", value: safeAverage(completedActivities.map((a) => a.importance)) },
+  ];
+
+  const logsByActivity = weeklyLogs.reduce((acc, log) => {
+    const key = log.activityId;
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
+  const topActivityEntry = Object.entries(logsByActivity).sort((a, b) => b[1] - a[1])[0];
+  const topActivityName = topActivityEntry ? (activityMap[Number(topActivityEntry[0])]?.name || "Unknown") : "None yet";
+
+  const activeDaysCount = dayCounts.filter((count) => count > 0).length;
+  const uniqueActivitiesCount = new Set(weeklyLogs.map((log) => log.activityId)).size;
   
   return (
     <div className="min-h-screen bg-gray-400 text-white">
@@ -65,7 +127,60 @@ export default function Tracker() {
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-4xl font-bold mb-12" style={{ fontFamily: 'monospace' }}>Your progress so far...</h2>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-gray-500">Logs this week</p>
+            <p className="text-3xl font-bold mt-2">{weeklyLogs.length}</p>
+          </div>
+          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-gray-500">Active days</p>
+            <p className="text-3xl font-bold mt-2">{activeDaysCount} / 7</p>
+          </div>
+          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-gray-500">Unique activities</p>
+            <p className="text-3xl font-bold mt-2">{uniqueActivitiesCount}</p>
+          </div>
+          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-gray-500">Most repeated</p>
+            <p className="text-lg font-semibold mt-2 truncate">{topActivityName}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+            <h3 className="text-lg font-semibold mb-3">Activity Volume by Day</h3>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={weeklyBarData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="day" />
+                  <YAxis allowDecimals={false} />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#4b5563" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+            <h3 className="text-lg font-semibold mb-3">Weekly Balance Profile</h3>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="72%" data={radarData}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="metric" />
+                  <PolarRadiusAxis angle={30} domain={[0, 5]} />
+                  <Radar name="Average" dataKey="value" stroke="#1f2937" fill="#1f2937" fillOpacity={0.4} />
+                  <Tooltip />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="text-xs text-gray-600 mt-2">Scale: 0 to 5, using your completed activities from the last 7 days.</p>
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
+          <h3 className="text-xl font-semibold mb-3">Weekly Habit Matrix</h3>
           <table className="w-full text-center border-collapse text-gray-800" style={{ border: '4px solid black' }}>
             <thead>
               <tr className="bg-gray-300 border-b-4 border-black">
@@ -79,7 +194,7 @@ export default function Tracker() {
             </thead>
             <tbody>
               {activities.map((act) => {
-                const activityLogs = logs.filter(l => l.activityId === act.id);
+                const activityLogs = weeklyLogs.filter((l) => l.activityId === act.id);
                 const hasLogsThisWeek = dayIndex => activityLogs.some(l => l.dayOfWeek === dayIndex);
                 
                 return (

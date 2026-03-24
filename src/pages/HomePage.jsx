@@ -5,11 +5,64 @@ export default function HomePage({ onGetActivities }) {
   const [physicalEnergy, setPhysicalEnergy] = useState(3);
   const [socialBattery, setSocialBattery] = useState(3);
 
-  const handleGetActivities = () => {
+  const weatherCodeToCondition = (code) => {
+    if (typeof code !== "number") return "unknown";
+    if (code === 0 || code === 1) return "clear";
+    if ([2, 3, 45, 48].includes(code)) return "cloudy";
+    if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return "rain";
+    if ([56, 57, 66, 67, 71, 73, 75, 77, 85, 86].includes(code)) return "snow";
+    if ([95, 96, 99].includes(code)) return "storm";
+    return "unknown";
+  };
+
+  const getCurrentPosition = () =>
+    new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation unavailable"));
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: false,
+        timeout: 4000,
+        maximumAge: 600000,
+      });
+    });
+
+  const buildContextPayload = async () => {
+    const now = new Date();
+    const baseContext = {
+      hour: now.getHours(),
+      isWeekend: now.getDay() === 0 || now.getDay() === 6,
+      weather: "unknown",
+    };
+
+    try {
+      const position = await getCurrentPosition();
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const weatherResponse = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code`,
+      );
+      if (!weatherResponse.ok) {
+        return baseContext;
+      }
+      const weatherData = await weatherResponse.json();
+      return {
+        ...baseContext,
+        weather: weatherCodeToCondition(weatherData?.current?.weather_code),
+      };
+    } catch {
+      return baseContext;
+    }
+  };
+
+  const handleGetActivities = async () => {
+    const context = await buildContextPayload();
     onGetActivities({
       timeAvailable,
       physicalEnergy,
       socialBattery,
+      context,
     });
   };
 
