@@ -51,7 +51,7 @@ export default function Tracker() {
   };
 
   if (loading) {
-    return <div className="min-h-screen bg-gray-400 p-8 text-white">Loading tracker...</div>;
+    return <div className="min-h-screen bg-brand-bg p-8 text-brand-text">Loading tracker...</div>;
   }
 
   const now = new Date();
@@ -110,15 +110,15 @@ export default function Tracker() {
   const uniqueActivitiesCount = new Set(weeklyLogs.map((log) => log.activityId)).size;
   
   return (
-    <div className="min-h-screen bg-gray-400 text-white">
+    <div className="min-h-screen bg-brand-bg text-brand-text">
       {/* Header Navigation */}
-      <nav className="bg-gray-600 p-4 flex justify-between items-center">
+      <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/home'}>Home</button>
-          <button className="hover:text-gray-200 underline" onClick={() => window.location.href = '/tracker'}>Tracker</button>
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/activity-list'}>Activity List</button>
-          <button className="bg-white text-gray-600 px-4 py-1 rounded" onClick={() => { localStorage.removeItem('userId'); window.location.href = '/signin'; }}>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/home'}>Home</button>
+          <button className="hover:text-brand-muted underline" onClick={() => window.location.href = '/tracker'}>Tracker</button>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/activity-list'}>Activity List</button>
+          <button className="bg-brand-btn text-brand-btn-text px-4 py-1 rounded" onClick={() => { localStorage.removeItem('userId'); window.location.href = '/signin'; }}>
             Log out
           </button>
         </div>
@@ -128,26 +128,26 @@ export default function Tracker() {
         <h2 className="text-4xl font-bold mb-12" style={{ fontFamily: 'monospace' }}>Your progress so far...</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
-            <p className="text-xs uppercase tracking-widest text-gray-500">Logs this week</p>
+          <div className="bg-brand-surface text-brand-text rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-brand-muted">Logs this week</p>
             <p className="text-3xl font-bold mt-2">{weeklyLogs.length}</p>
           </div>
-          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
-            <p className="text-xs uppercase tracking-widest text-gray-500">Active days</p>
+          <div className="bg-brand-surface text-brand-text rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-brand-muted">Active days</p>
             <p className="text-3xl font-bold mt-2">{activeDaysCount} / 7</p>
           </div>
-          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
-            <p className="text-xs uppercase tracking-widest text-gray-500">Unique activities</p>
+          <div className="bg-brand-surface text-brand-text rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-brand-muted">Unique activities</p>
             <p className="text-3xl font-bold mt-2">{uniqueActivitiesCount}</p>
           </div>
-          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
-            <p className="text-xs uppercase tracking-widest text-gray-500">Most repeated</p>
+          <div className="bg-brand-surface text-brand-text rounded-lg p-4 shadow">
+            <p className="text-xs uppercase tracking-widest text-brand-muted">Most repeated</p>
             <p className="text-lg font-semibold mt-2 truncate">{topActivityName}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
-          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+          <div className="bg-brand-surface text-brand-text rounded-lg p-4 shadow">
             <h3 className="text-lg font-semibold mb-3">Activity Volume by Day</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -156,13 +156,13 @@ export default function Tracker() {
                   <XAxis dataKey="day" />
                   <YAxis allowDecimals={false} />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#4b5563" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="count" fill="#a16207" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-gray-200 text-gray-800 rounded-lg p-4 shadow">
+          <div className="bg-brand-surface text-brand-text rounded-lg p-4 shadow">
             <h3 className="text-lg font-semibold mb-3">Weekly Balance Profile</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -170,20 +170,20 @@ export default function Tracker() {
                   <PolarGrid />
                   <PolarAngleAxis dataKey="metric" />
                   <PolarRadiusAxis angle={30} domain={[0, 5]} />
-                  <Radar name="Average" dataKey="value" stroke="#1f2937" fill="#1f2937" fillOpacity={0.4} />
+                  <Radar name="Average" dataKey="value" stroke="#292524" fill="#292524" fillOpacity={0.4} />
                   <Tooltip />
                 </RadarChart>
               </ResponsiveContainer>
             </div>
-            <p className="text-xs text-gray-600 mt-2">Scale: 0 to 5, using your completed activities from the last 7 days.</p>
+            <p className="text-xs text-brand-muted mt-2">Scale: 0 to 5, using your completed activities from the last 7 days.</p>
           </div>
         </div>
 
         <div className="overflow-x-auto">
           <h3 className="text-xl font-semibold mb-3">Weekly Habit Matrix</h3>
-          <table className="w-full text-center border-collapse text-gray-800" style={{ border: '4px solid black' }}>
+          <table className="w-full text-center border-collapse text-brand-text" style={{ border: '4px solid #292524' }}>
             <thead>
-              <tr className="bg-gray-300 border-b-4 border-black">
+              <tr className="bg-brand-surface border-b-4 border-brand-text">
                 <th className="p-4 border-r-4 border-black font-semibold">Habit</th>
                 {DAYS_OF_WEEK.map((day, i) => (
                   <th key={day} className={`p-4 font-semibold ${i !== DAYS_OF_WEEK.length - 1 ? 'border-r-4 border-black' : ''}`}>
@@ -198,7 +198,7 @@ export default function Tracker() {
                 const hasLogsThisWeek = dayIndex => activityLogs.some(l => l.dayOfWeek === dayIndex);
                 
                 return (
-                  <tr key={act.id} className="bg-gray-300 border-b-4 border-black font-medium">
+                  <tr key={act.id} className="bg-brand-surface border-b-4 border-brand-border font-medium">
                     <td className="p-4 border-r-4 border-black text-left">{act.name}</td>
                     {DAYS_OF_WEEK.map((day, i) => (
                       <td key={day} className={`p-4 ${i !== DAYS_OF_WEEK.length - 1 ? 'border-r-4 border-black' : ''}`}>

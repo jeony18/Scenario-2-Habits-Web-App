@@ -6,13 +6,15 @@
    Edit these CSS variables to change the colour scheme site-wide.
    ─────────────────────────────────────────────────────────────── */
 :root {
-  --color-bg:           #ffffff;
-  --color-surface:      #f5f5f5;
-  --color-border:       #e5e7eb;
-  --color-text:         #111111;
+  --color-bg:           #fafaf9;
+  --color-surface:      #f5f0eb;
+  --color-border:       #e7e0d8;
+  --color-text:         #292524;
   --color-muted:        #9ca3af;
-  --color-btn-bg:       #111111;
+  --color-btn-bg:       #292524;
   --color-btn-text:     #ffffff;
   --color-error:        #dc2626;
   --color-success:      #16a34a;
+  --color-accent:       #a16207;
+  --color-nav:          #e8e0d5;
 }

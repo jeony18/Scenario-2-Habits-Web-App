@@ -67,15 +67,15 @@ export default function HomePage({ onGetActivities }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-400 text-white">
+    <div className="min-h-screen bg-brand-bg text-brand-text">
       {/* Header Navigation */}
-      <nav className="bg-gray-600 p-4 flex justify-between items-center">
+      <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/home'}>Home</button>
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/tracker'}>Tracker</button>
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/activity-list'}>Activity List</button>
-          <button className="bg-white text-gray-600 px-4 py-1 rounded" onClick={() => { localStorage.removeItem('userId'); window.location.href = '/signin'; }}>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/home'}>Home</button>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/tracker'}>Tracker</button>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/activity-list'}>Activity List</button>
+          <button className="bg-brand-btn text-brand-btn-text px-4 py-1 rounded" onClick={() => { localStorage.removeItem('userId'); window.location.href = '/signin'; }}>
             Log out
           </button>
         </div>
@@ -100,7 +100,7 @@ export default function HomePage({ onGetActivities }) {
                 step="1"
                 value={timeAvailable}
                 onChange={(e) => setTimeAvailable(Number(e.target.value))}
-                className="flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                className="flex-1 h-2 bg-brand-border rounded-lg appearance-none cursor-pointer"
               />
               <span className="text-sm font-semibold w-16 text-right">{timeAvailable} min</span>
             </div>
@@ -115,7 +115,7 @@ export default function HomePage({ onGetActivities }) {
           {/* Physical Energy Slider */}
           <div>
             <label className="block text-sm mb-2">Physical Energy</label>
-            <p className="text-xs mb-3 text-gray-200">How active do you feel?</p>
+            <p className="text-xs mb-3 text-brand-muted">How active do you feel?</p>
             <div className="flex items-center gap-4">
               <span className="text-2xl">
                 {physicalEnergy <= 2 ? "🪫" : physicalEnergy <= 3 ? "🔋" : "⚡"}
@@ -127,11 +127,11 @@ export default function HomePage({ onGetActivities }) {
                 step="1"
                 value={physicalEnergy}
                 onChange={(e) => setPhysicalEnergy(Number(e.target.value))}
-                className="flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                className="flex-1 h-2 bg-brand-border rounded-lg appearance-none cursor-pointer"
               />
               <span className="text-sm font-semibold w-6 text-center">{physicalEnergy}</span>
             </div>
-            <div className="flex justify-between text-xs mt-2 text-gray-200">
+            <div className="flex justify-between text-xs mt-2 text-brand-muted">
               <span>Low</span>
               <span>High</span>
             </div>
@@ -140,7 +140,7 @@ export default function HomePage({ onGetActivities }) {
           {/* Social Battery Slider */}
           <div>
             <label className="block text-sm mb-2">Social battery</label>
-            <p className="text-xs mb-3 text-gray-200">How much do you want human connection?</p>
+            <p className="text-xs mb-3 text-brand-muted">How much do you want human connection?</p>
             <div className="flex items-center gap-4">
               <span className="text-2xl">🔒</span>
               <input
@@ -150,11 +150,11 @@ export default function HomePage({ onGetActivities }) {
                 step="1"
                 value={socialBattery}
                 onChange={(e) => setSocialBattery(Number(e.target.value))}
-                className="flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                className="flex-1 h-2 bg-brand-border rounded-lg appearance-none cursor-pointer"
               />
               <span className="text-sm font-semibold w-6 text-center">{socialBattery}</span>
             </div>
-            <div className="flex justify-between text-xs mt-2 text-gray-200">
+            <div className="flex justify-between text-xs mt-2 text-brand-muted">
               <span>Alone</span>
               <span>Social</span>
             </div>
@@ -165,7 +165,7 @@ export default function HomePage({ onGetActivities }) {
         <div className="flex justify-center mt-12">
           <button
             onClick={handleGetActivities}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition"
+            className="bg-brand-btn hover:opacity-90 text-brand-btn-text px-8 py-3 rounded-lg font-medium transition"
           >
             Give me activities
           </button>

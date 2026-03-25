@@ -95,18 +95,18 @@ export default function ActivityList() {
     }
   };
 
-  if (loading) return <div className="p-8">Loading activities...</div>;
+  if (loading) return <div className="min-h-screen bg-brand-bg text-brand-text p-8">Loading activities...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-400 text-white">
+    <div className="min-h-screen bg-brand-bg text-brand-text">
       {/* Header Navigation */}
-      <nav className="bg-gray-600 p-4 flex justify-between items-center">
+      <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/home'}>Home</button>
-          <button className="hover:text-gray-200" onClick={() => window.location.href = '/tracker'}>Tracker</button>
-          <button className="hover:text-gray-200 underline" onClick={() => window.location.href = '/activity-list'}>Activity List</button>
-          <button className="bg-white text-gray-600 px-4 py-1 rounded" onClick={() => { localStorage.removeItem('userId'); window.location.href = '/signin'; }}>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/home'}>Home</button>
+          <button className="hover:text-brand-muted" onClick={() => window.location.href = '/tracker'}>Tracker</button>
+          <button className="hover:text-brand-muted underline" onClick={() => window.location.href = '/activity-list'}>Activity List</button>
+          <button className="bg-brand-btn text-brand-btn-text px-4 py-1 rounded" onClick={() => { localStorage.removeItem('userId'); window.location.href = '/signin'; }}>
             Log out
           </button>
         </div>
@@ -114,13 +114,13 @@ export default function ActivityList() {
 
       <div className="max-w-6xl mx-auto flex gap-8 py-12 px-4">
         {/* Sidebar */}
-        <div className="w-48 shrink-0 border-r border-gray-500 pr-4">
+        <div className="w-48 shrink-0 border-r border-brand-border pr-4">
           <ul className="space-y-4">
             <li>
-              <button className="text-gray-200 hover:text-white">Interests</button>
+              <button className="text-brand-muted hover:text-brand-text">Interests</button>
             </li>
             <li>
-              <span className="font-bold border-l-4 border-white pl-2">Activity List</span>
+              <span className="font-bold border-l-4 border-brand-accent pl-2">Activity List</span>
             </li>
           </ul>
         </div>
@@ -130,7 +130,7 @@ export default function ActivityList() {
           <div className="flex justify-start items-center mb-6">
             <button
               onClick={handleCreateNew}
-              className="bg-gray-200 text-gray-800 px-4 py-2 rounded font-medium hover:bg-white transition-colors"
+              className="bg-brand-btn text-brand-btn-text px-4 py-2 rounded font-medium hover:opacity-90 transition-opacity"
             >
               Crate Custom Activity
             </button>
@@ -138,14 +138,14 @@ export default function ActivityList() {
           
           <div className="grid grid-cols-1 gap-4">
             {activities.map((act) => (
-              <div key={act.id} className="bg-gray-300 text-gray-800 p-4 rounded flex justify-between items-center shadow">
+              <div key={act.id} className="bg-brand-surface text-brand-text p-4 rounded flex justify-between items-center shadow border border-brand-border">
                 <div className="flex-1 mr-4">
                   <h3 className="text-xl font-semibold mb-1">{act.name}</h3>
-                  <p className="text-gray-600 text-sm mb-2">{act.description}</p>
+                  <p className="text-brand-muted text-sm mb-2">{act.description}</p>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => handleEdit(act)} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors">Personalise</button>
-                  <button onClick={() => handleDelete(act.id)} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors">Remove</button>
+                  <button onClick={() => handleEdit(act)} className="bg-brand-accent text-white px-3 py-1 rounded hover:opacity-90 transition-opacity">Personalise</button>
+                  <button onClick={() => handleDelete(act.id)} className="bg-brand-error text-white px-3 py-1 rounded hover:opacity-90 transition-opacity">Remove</button>
                 </div>
               </div>
             ))}
@@ -162,11 +162,11 @@ export default function ActivityList() {
             <form onSubmit={handleSave} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
-                <input required type="text" value={formParams.name} onChange={(e) => setFormParams({...formParams, name: e.target.value})} className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-blue-500" />
+                <input required type="text" value={formParams.name} onChange={(e) => setFormParams({...formParams, name: e.target.value})} className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-brand-accent" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">Description</label>
-                <input type="text" value={formParams.description} onChange={(e) => setFormParams({...formParams, description: e.target.value})} className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-blue-500" />
+                <input type="text" value={formParams.description} onChange={(e) => setFormParams({...formParams, description: e.target.value})} className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:border-brand-accent" />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -189,8 +189,8 @@ export default function ActivityList() {
               </div>
               
               <div className="mt-8 flex justify-end gap-3">
-                <button type="button" onClick={handleCancel} className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-100">Cancel</button>
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                <button type="button" onClick={handleCancel} className="px-4 py-2 text-brand-muted border border-brand-border rounded hover:bg-brand-surface">Cancel</button>
+                <button type="submit" className="bg-brand-btn text-brand-btn-text px-4 py-2 rounded hover:opacity-90">
                   {isCreating ? "Create" : "Save Changes"}
                 </button>
               </div>

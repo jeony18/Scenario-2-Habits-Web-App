@@ -13,6 +13,8 @@ export default {
         'brand-btn-text': 'var(--color-btn-text)',
         'brand-error':    'var(--color-error)',
         'brand-success':  'var(--color-success)',
+        'brand-accent':   'var(--color-accent)',
+        'brand-nav':      'var(--color-nav)',
       },
     },
   },
