@@ -1,5 +1,4 @@
 export default function RecommendationsPage({ userPreferences, recommendations, isLoading, onBack }) {
-  // Helper to map 1-5 scale back to words
   const getDescriptor = (val) => {
     if (val <= 2) return "Low";
     if (val === 3) return "Medium";
@@ -60,7 +59,6 @@ export default function RecommendationsPage({ userPreferences, recommendations, 
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text">
-      {/* Header Navigation */}
       <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
@@ -73,13 +71,10 @@ export default function RecommendationsPage({ userPreferences, recommendations, 
         </div>
       </nav>
 
-      {/* Main Content */}
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-4xl font-light mb-12">Your recommendations</h2>
 
-        {/* Top Recommendation and Alternatives Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Top Recommendation - Spans 2 rows */}
           <div className="bg-brand-surface text-brand-text p-8 rounded-lg lg:row-span-2 flex flex-col border border-brand-border">
             <h3 className="text-lg font-bold mb-4">Top Recommendation</h3>
 
@@ -112,7 +107,6 @@ export default function RecommendationsPage({ userPreferences, recommendations, 
             </button>
           </div>
 
-          {/* Alternatives */}
           {alts.map((alt, index) => (
             <div key={index} className="bg-brand-surface text-brand-text p-6 rounded-lg flex flex-col border border-brand-border">
               <h4 className="text-lg font-bold mb-3">{alt.name} <span className="ml-2">{getEmoji(alt.name)}</span></h4>
@@ -132,7 +126,6 @@ export default function RecommendationsPage({ userPreferences, recommendations, 
           ))}
         </div>
 
-        {/* Back Button */}
         <div className="mt-12 text-center">
           <button
             onClick={onBack}

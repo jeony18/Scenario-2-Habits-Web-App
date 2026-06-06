@@ -188,17 +188,14 @@ def get_logs():
     if not user_id:
         return jsonify({"error": "user_id is required"}), 400
         
-    # Get all activities for the user
     user_activities = Activity.query.filter_by(UserID=user_id).all()
     activity_ids = [act.ActivityID for act in user_activities]
     activity_map = {act.ActivityID: act.Name for act in user_activities}
-    
-    # Get logs for these activities
+
     logs = ActivityLog.query.filter(ActivityLog.ActivityID.in_(activity_ids)).all()
     
     result = []
     for log in logs:
-        # Assuming we want day of week, 0=Monday, 6=Sunday
         day_of_week = log.Timestamp.weekday()
         result.append({
             "logId": log.LogID,
@@ -210,7 +207,6 @@ def get_logs():
     return jsonify(result), 200
 
 def map_minutes_to_slots(minutes):
-    """Map the frontend 15-120 minutes to 1-5 duration slots used in Python engine"""
     if minutes <= 15:
         return 1
     elif minutes <= 30:
@@ -236,19 +232,15 @@ def get_recommendations():
     
     user_id = data.get('userId')
     
-    # 1. Fetch user specific activities
     acts = Activity.query.filter_by(UserID=user_id).all() if user_id else []
-    
-    # Map them to the list logic expected by engine
-    user_activities = [{"id": a.ActivityID, "name": a.Name, "description": a.Description or "", "duration": a.Duration, 
-                        "physicality": a.Physicality, "sociability": a.Sociability, 
+
+    user_activities = [{"id": a.ActivityID, "name": a.Name, "description": a.Description or "", "duration": a.Duration,
+                        "physicality": a.Physicality, "sociability": a.Sociability,
                         "importance": a.Importance} for a in acts]
-    
-    # Fallback to default if no user or no acts found
+
     if not user_activities:
         user_activities = default_activities
     
-    # 2. Extract inputs (provide defaults if missing)
     time_minutes = data.get('timeAvailable', 30)
     physical_energy = data.get('physicalEnergy', 3)
     social_battery = data.get('socialBattery', 3)
@@ -265,10 +257,8 @@ def get_recommendations():
         "isWeekend": bool(context_data.get('isWeekend', False)),
     }
     
-    # 3. Map minutes to Python engine slots
     available_time_slots = map_minutes_to_slots(time_minutes)
-    
-    # 4. Find recently completed activities (last 18 hours) to prevent immediate repetition
+
     recent_activity_ids = set()
     if user_id:
         time_threshold = datetime.utcnow() - timedelta(hours=18)
@@ -278,7 +268,6 @@ def get_recommendations():
         ).all()
         recent_activity_ids = {log.ActivityID for log in recent_logs}
     
-    # 5. Get recommendations using custom engine, passing in the recent activities to penalize
     results = recommend(
         user_activities,
         available_time_slots,
@@ -288,7 +277,6 @@ def get_recommendations():
         recommendation_context,
     )
     
-    # 6. Format results safely for React (handle cases with None values)
     deterministic = results.get("deterministic", [])
     leap = results.get("take_the_leap")
     
@@ -302,7 +290,6 @@ def get_recommendations():
         alternatives.append(deterministic[1])
         
     if leap:
-        # We usually want 'take the leap' as the 2nd alternative 
         alternatives.append(leap)
 
     return jsonify({

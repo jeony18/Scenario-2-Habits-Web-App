@@ -99,7 +99,6 @@ export default function ActivityList() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text">
-      {/* Header Navigation */}
       <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
@@ -113,7 +112,6 @@ export default function ActivityList() {
       </nav>
 
       <div className="max-w-6xl mx-auto flex gap-8 py-12 px-4">
-        {/* Sidebar */}
         <div className="w-48 shrink-0 border-r border-brand-border pr-4">
           <ul className="space-y-4">
             <li>
@@ -125,7 +123,6 @@ export default function ActivityList() {
           </ul>
         </div>
         
-        {/* Main List */}
         <div className="flex-1">
           <div className="flex justify-start items-center mb-6">
             <button
@@ -153,7 +150,6 @@ export default function ActivityList() {
         </div>
       </div>
 
-      {/* Editor Modal */}
       {(editingParams || isCreating) && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white text-gray-800 rounded-lg shadow-xl w-full max-w-md p-6 relative">

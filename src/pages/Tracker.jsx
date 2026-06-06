@@ -111,7 +111,6 @@ export default function Tracker() {
   
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text">
-      {/* Header Navigation */}
       <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">

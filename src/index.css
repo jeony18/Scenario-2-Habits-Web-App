@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Colour scheme ──────────────────────────────────────────────
-   Edit these CSS variables to change the colour scheme site-wide.
-   ─────────────────────────────────────────────────────────────── */
 :root {
   --color-bg:           #fafaf9;
   --color-surface:      #f5f0eb;

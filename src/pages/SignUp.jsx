@@ -40,7 +40,6 @@ function SignUp() {
       const data = await response.json()
 
       if (response.ok) {
-        // Successfully registered, navigate to login
         navigate('/signin')
       } else {
         setErrorMsg(data.error || 'Registration failed')

@@ -25,7 +25,6 @@ function SignIn() {
       const data = await response.json()
 
       if (response.ok) {
-        // Successfully logged in
         localStorage.setItem("userId", data.userId)
         navigate('/home')
       } else {

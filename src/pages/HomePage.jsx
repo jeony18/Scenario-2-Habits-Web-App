@@ -68,7 +68,6 @@ export default function HomePage({ onGetActivities }) {
 
   return (
     <div className="min-h-screen bg-brand-bg text-brand-text">
-      {/* Header Navigation */}
       <nav className="bg-brand-nav p-4 flex justify-between items-center">
         <div className="text-2xl font-bold tracking-wider cursor-pointer" onClick={() => window.location.href = '/home'}>Habitly</div>
         <div className="flex gap-6">
@@ -81,15 +80,12 @@ export default function HomePage({ onGetActivities }) {
         </div>
       </nav>
 
-      {/* Main Content */}
       <div className="max-w-2xl mx-auto py-12 px-4">
         <h1 className="text-4xl font-light mb-12 text-center">
           How are you feeling today?
         </h1>
 
-        {/* Sliders Container */}
         <div className="space-y-10">
-          {/* Time Available Slider */}
           <div>
             <label className="block text-sm mb-2">Time available</label>
             <div className="flex items-center gap-4">
@@ -112,7 +108,6 @@ export default function HomePage({ onGetActivities }) {
             </div>
           </div>
 
-          {/* Physical Energy Slider */}
           <div>
             <label className="block text-sm mb-2">Physical Energy</label>
             <p className="text-xs mb-3 text-brand-muted">How active do you feel?</p>
@@ -137,7 +132,6 @@ export default function HomePage({ onGetActivities }) {
             </div>
           </div>
 
-          {/* Social Battery Slider */}
           <div>
             <label className="block text-sm mb-2">Social battery</label>
             <p className="text-xs mb-3 text-brand-muted">How much do you want human connection?</p>
@@ -161,7 +155,6 @@ export default function HomePage({ onGetActivities }) {
           </div>
         </div>
 
-        {/* Button */}
         <div className="flex justify-center mt-12">
           <button
             onClick={handleGetActivities}
